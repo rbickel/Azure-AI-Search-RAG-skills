@@ -1,0 +1,2 @@
+RESOURCE_GROUP_NAME=azruesearch-rg
+az deployment group create -n azruesearch -g $RESOURCE_GROUP_NAME --template-file azuresearch.bicep

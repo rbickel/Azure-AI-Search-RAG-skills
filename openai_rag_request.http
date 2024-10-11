@@ -1,0 +1,66 @@
+
+POST https://rbklaieus2.openai.azure.com/openai/deployments/gpt-35-turbo-16k/chat/completions?api-version=2024-02-15-preview
+Content-Type: application/json
+api-key: cb1134eb231d4c5f9c02f59a942cadc2
+
+{
+  "data_sources": [
+    {
+      "type": "azure_search",
+      "parameters": {
+        "endpoint": "https://rbklaisearch.search.windows.net",
+        "index_name": "goelandgpt",
+        "semantic_configuration": "default",
+        "query_type": "vectorSemanticHybrid",
+        "fields_mapping": {
+          "content_fields_separator": "\n",
+          "content_fields": [
+            "chunk"
+          ],
+          "filepath_field": "chunk_id",
+          "title_field": "title",
+          "url_field": "url",
+          "vector_fields": [
+            "vector"
+          ]
+        },
+        "in_scope": true,
+        "role_information": "You are an AI assistant that helps people find information.",
+        "filter": null,
+        "strictness": 3,
+        "top_n_documents": 5,
+        "authentication": {
+          "type": "api_key",
+          "key": ""
+        },
+        "embedding_dependency": {
+          "type": "deployment_name",
+          "deployment_name": "text-embedding-3-large"
+        },
+        "key": "",
+        "indexName": "rag-index"
+      }
+    }
+  ],
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are an AI assistant that helps people find information."
+    },
+    {
+      "role": "user",
+      "content": "How can I move contacts from my proliste ?"
+    }
+  ],
+  "deployment": "text-embedding-3-large",
+  "temperature": 0,
+  "top_p": 1,
+  "max_tokens": 2000,
+  "stop": null,
+  "stream": true,
+  "frequency_penalty": 0,
+  "presence_penalty": 0,
+  "azureSearchEndpoint": "https://rbklaisearch.search.windows.net",
+  "azureSearchKey": "",
+  "azureSearchIndexName": "rag-index"
+}

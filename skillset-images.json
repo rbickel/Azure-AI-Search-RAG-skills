@@ -1,0 +1,63 @@
+{
+  "@odata.context": "https://rbklsearch.search.windows.net/$metadata#skillsets/$entity",
+  "@odata.etag": "\"0x8DC75B40247AD7F\"",
+  "name": "image-skillset",
+  "description": "",
+  "skills": [
+    {
+      "@odata.type": "#Microsoft.Skills.Custom.WebApiSkill",
+      "name": "#1",
+      "description": "ask gpt4 to generate a detailed description of what is happening on the image",
+      "context": "/document/normalized_images/*",
+      "uri": "https://rbkltimesheet.azurewebsites.net/api/image_ai_description",
+      "httpMethod": "POST",
+      "timeout": "PT30S",
+      "batchSize": 1,
+      "degreeOfParallelism": 1,
+      "authResourceId": null,
+      "inputs": [
+        {
+          "name": "image",
+          "source": "/document/normalized_images/*"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "description",
+          "targetName": "content"
+        }
+      ],
+      "httpHeaders": {},
+      "authIdentity": null
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill",
+      "name": "#2",
+      "description": "Skill to generate embeddings via Azure OpenAI",
+      "context": "/document",
+      "resourceUri": "https://rbklaieus2.openai.azure.com",
+      "apiKey": "<redacted>",
+      "deploymentId": "text-embedding-3-large",
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/normalized_images/0/content"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "embedding",
+          "targetName": "vector"
+        }
+      ],
+      "authIdentity": null
+    }
+  ],
+  "cognitiveServices": {
+    "@odata.type": "#Microsoft.Azure.Search.DefaultCognitiveServices",
+    "description": null
+  },
+  "knowledgeStore": null,
+  "indexProjections": null,
+  "encryptionKey": null
+}

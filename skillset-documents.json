@@ -1,0 +1,92 @@
+{
+    "name": "rag-skillset",
+    "description": "Skillset to chunk documents and generating embeddings",
+    "skills": [
+      {
+        "@odata.type": "#Microsoft.Skills.Text.SplitSkill",
+        "name": "#1",
+        "description": "Split skill to chunk documents",
+        "context": "/document",
+        "defaultLanguageCode": "fr",
+        "textSplitMode": "pages",
+        "maximumPageLength": 2000,
+        "pageOverlapLength": 500,
+        "maximumPagesToTake": 0,
+        "inputs": [
+          {
+            "name": "text",
+            "source": "/document/content"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "textItems",
+            "targetName": "pages"
+          }
+        ]
+      },
+      {
+        "@odata.type": "#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill",
+        "name": "#2",
+        "description": "Skill to generate embeddings via Azure OpenAI",
+        "context": "/document/pages/*",
+        "resourceUri": "https://rbklaieus2.openai.azure.com",
+        "apiKey": "cb1134eb231d4c5f9c02f59a942cadc2",
+        "deploymentId": "text-embedding-3-large",
+        "inputs": [
+          {
+            "name": "text",
+            "source": "/document/pages/*"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "embedding",
+            "targetName": "vector"
+          }
+        ],
+        "authIdentity": null
+      }
+    ],
+    "cognitiveServices": null,
+    "knowledgeStore": null,
+    "indexProjections": {
+      "selectors": [
+        {
+          "targetIndexName": "rag-index",
+          "parentKeyFieldName": "parent_id",
+          "sourceContext": "/document/pages/*",
+          "mappings": [
+            {
+              "name": "chunk",
+              "source": "/document/pages/*",
+              "sourceContext": null,
+              "inputs": []
+            },
+            {
+              "name": "vector",
+              "source": "/document/pages/*/vector",
+              "sourceContext": null,
+              "inputs": []
+            },
+            {
+              "name": "title",
+              "source": "/document/metadata_storage_name",
+              "sourceContext": null,
+              "inputs": []
+            },
+            {
+              "name": "url",
+              "source": "/document/metadata_storage_path",
+              "sourceContext": null,
+              "inputs": []
+            }
+          ]
+        }
+      ],
+      "parameters": {
+        "projectionMode": "skipIndexingParentDocuments"
+      }
+    },
+    "encryptionKey": null
+  }

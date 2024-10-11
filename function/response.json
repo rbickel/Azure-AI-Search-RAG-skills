@@ -1,0 +1,26 @@
+{
+    "values": 
+    [
+        {
+          "recordId": "b5",
+          "data" : 
+          {
+              "contractDate":  { "day" : 5, "month": 2, "year" : 2018 }
+          }
+        },
+        {
+          "recordId": "a1",
+          "data" : {
+              "contractDate": { "day" : 3, "month": 11, "year" : 2023 }                    
+          }
+        },
+        {
+          "recordId": "c3",
+          "data" : 
+          {
+          },
+          "errors": [ { "message": "contractText field required "}   ],  
+          "warnings": [ {"message": "Date not found" }  ]
+        }
+      ]
+  }
